@@ -3,8 +3,8 @@ jdk: openjdk7
 env:
   global:
     - TERM=dumb
-    - secure: sPZuYyAvTEOh+4fuvZwP1cP4jN1GWAMzLudeb1/2yBXOLQTwIQjKa5q640m6sMocofXqIpBYCxP0znG4jC7fo6VTX6mcO2ezcotuVxfWdTiz5HSD8S9u9IvK+mHsa/IpsRxnSft0E47qLieLktvcoBo/sAkJq444lnva/xkbPv8=
-    - secure: nLDiPa2QsW5AFnMsQkPaqd+C1XKbTrEmSmNE5dDzsdtluaJkaDedhNH9RiyPLBJDFt88EO1ynNvA6sXMtz+Q3EvDzlH1mLxJgrd4x9by72DGp5Kz5QPk/FY2x2edVK37NyXS0GVYOGOr5VW/8mLjpFv9dTMFpyfsrArOTvgW6XY=
+    - secure: "\x17Æg¥\x8DõmT6¯f/\\¦l\"\x1Aq`\x11a\x17\x96)M\x95áö3\x9Cþ¢z½\x1F,\b<$ÌÓ\x1AÀ\x8AS'C/lÝ¡zD¨t\x92¸ä=ÇÝ¼}rÈ²jÀ|\N\eA¸5\fW\x1C©\x9Bß\x0E_>\x02W\x8D¤¼1L7¼ìt\x93\x16>\x18ºÆi!\x92Ø°ã'\x8AéoP\x10P\x957·Ï\x83\nÚ~ù¥A¹|9G"
+    - secure: "\x185U\x8EÊÖ\"à\x99¥H\\Àµ\x99\x8C\x84\x1Eþ,¡\x97ôüub³\x9F<¥ã¾*¼óÐÂ&\N\x96C\x91\x1E©\x8F\x9Eeº3\x84eì´úE°8ÄbI\x12ÔÛ\rX¬w\b´ïg»`:\x10E9>\x8A+6è¸{µ.èç\"=\x13\f9\eFWJ\x10U\x9AN.\x05\x1FÁ\x972\vWnY$B\x10Z\x04\x8BJ\x8D.¬\n\x15\tü]\x9F\x8E"
 script:
   - ./gradlew clean build --stacktrace --info
 after_success:
