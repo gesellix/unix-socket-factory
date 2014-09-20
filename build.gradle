@@ -1,0 +1,114 @@
+import java.text.SimpleDateFormat
+
+buildscript {
+  repositories {
+    maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
+    maven { url 'http://jcenter.bintray.com' }
+    mavenLocal()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-5'
+  }
+}
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+}
+
+apply plugin: 'groovy'
+
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+apply plugin: 'versions'
+
+ext {
+  localJars = fileTree(dir: 'libs', include: ['*.jar'])
+  artifactVersion = new SimpleDateFormat('yyyy-MM-dd\'T\'HH-mm-ss').format(new Date())
+  bintrayDryRun = false
+}
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.3.6'
+  compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+  compile localJars
+//  testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+}
+
+task sourcesJar(type: Jar) {
+  dependsOn classes
+  classifier 'sources'
+  from sourceSets.main.allSource
+}
+
+def dependencyVersions = [
+    'commons-lang:commons-lang'           : '2.6',
+    'commons-logging:commons-logging'     : '1.1.3',
+    'org.apache.httpcomponents:httpclient': '4.3',
+    'org.apache.httpcomponents:httpmime'  : '4.3'
+]
+
+configurations.all {
+  resolutionStrategy {
+    failOnVersionConflict()
+    force dependencyVersions.collect { k, v -> "$k:$v" }
+  }
+}
+
+jar {
+  from {
+    // include the junixsocket classes and native libs in this artifact
+    configurations.compile.collect {
+      if (it.parentFile == localJars.dir) {
+        it.isDirectory() ? it : zipTree(it)
+      }
+    }.findAll()
+  }
+}
+
+group = 'de.gesellix'
+
+artifacts {
+  archives sourcesJar
+}
+
+publishing {
+  publications {
+    unixSocketFactory(MavenPublication) {
+      version artifactVersion
+      from components.java
+      artifact sourcesJar
+    }
+  }
+}
+
+logger.warn "uses TRAVIS_SECURE_ENV_VARS: ${System.env.TRAVIS_SECURE_ENV_VARS}."
+
+bintray {
+  user = System.env.BINTRAY_USER ?: project["bintray.user"]
+  key = System.env.BINTRAY_API_KEY ?: project["bintray.key"]
+  publications = ['unixSocketFactory']
+  pkg {
+    repo = 'docker-utils'
+    //userOrg = 'myorg' // an optional organization name when the repo belongs to one of the user's orgs
+    name = 'unix-socket-factory'
+    desc = 'Adds unix socket support to the Apache HttpClient'
+    licenses = ['Apache-2.0']
+    labels = ['docker', 'unix socket', 'http client']
+    version = [
+        name: artifactVersion
+    ]
+  }
+  dryRun = bintrayDryRun
+}
+bintrayUpload.dependsOn build
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.1'
+  distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}
