@@ -27,9 +27,6 @@ class UnixSocketFactory implements SocketFactory {
 
   @Override
   def configure(httpClient, String dockerHost) {
-    if (socketFile) {
-      throw new UnsupportedOperationException("you can only configure once")
-    }
     this.socketFile = new File(dockerHost.replaceAll("unix://localhost", ""))
     def unixScheme = new Scheme("unix", 0xffff, this)
     httpClient.getConnectionManager().getSchemeRegistry().register(unixScheme)
