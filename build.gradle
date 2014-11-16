@@ -137,7 +137,6 @@ bintray {
   publications = ['unixSocketFactory']
   pkg {
     repo = 'docker-utils'
-    //userOrg = 'myorg' // an optional organization name when the repo belongs to one of the user's orgs
     name = 'unix-socket-factory'
     desc = 'Adds unix socket support to the Apache HttpClient'
     licenses = ['Apache-2.0']
