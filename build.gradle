@@ -2,15 +2,14 @@ import java.text.SimpleDateFormat
 
 buildscript {
   repositories {
-    maven { url "https://github.com/ben-manes/gradle-versions-plugin/raw/mvnrepo" }
-    maven { url 'http://jcenter.bintray.com' }
+    jcenter()
     mavenLocal()
     mavenCentral()
   }
 
   dependencies {
-    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.5'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.5-beta-5'
+    classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
   }
 }
 
@@ -25,7 +24,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-apply plugin: 'versions'
+apply plugin: 'com.github.ben-manes.versions'
 
 ext {
   localJars = fileTree(dir: 'libs', include: ['*.jar'])
@@ -143,9 +142,12 @@ bintray {
     desc = 'Adds unix socket support to the Apache HttpClient'
     licenses = ['Apache-2.0']
     labels = ['docker', 'unix socket', 'http client']
-    version = [
-        name: artifactVersion
-    ]
+    version {
+      name = artifactVersion
+      gpg {
+        sign = true
+      }
+    }
   }
   dryRun = bintrayDryRun
 }
