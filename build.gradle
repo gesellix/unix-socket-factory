@@ -99,6 +99,33 @@ publishing {
       artifact javadocJar {
         classifier "javadoc"
       }
+      pom.withXml {
+        asNode().children().last() + {
+          resolveStrategy = Closure.DELEGATE_FIRST
+          name 'unix-socket-factory'
+          description 'Adds unix socket support to the Apache HttpClient'
+          url "https://github.com/gesellix/unix-socket-factory"
+          scm {
+            url "https://github.com/gesellix/unix-socket-factory.git"
+            connection "https://github.com/gesellix/unix-socket-factory.git"
+            developerConnection "https://github.com/gesellix/unix-socket-factory.git"
+          }
+          licenses {
+            license {
+              name 'The Apache Software License, Version 2.0'
+              url 'http://www.apache.org/license/LICENSE-2.0.txt'
+              distribution 'repo'
+            }
+          }
+          developers {
+            developer {
+              id 'gesellix'
+              name 'Tobias Gesellchen'
+              email 'tobias@gesellix.de'
+            }
+          }
+        }
+      }
     }
   }
 }
