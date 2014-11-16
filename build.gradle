@@ -93,7 +93,12 @@ publishing {
     unixSocketFactory(MavenPublication) {
       version artifactVersion
       from components.java
-      artifact sourcesJar
+      artifact sourcesJar {
+        classifier "sources"
+      }
+      artifact javadocJar {
+        classifier "javadoc"
+      }
     }
   }
 }
